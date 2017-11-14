@@ -11,8 +11,13 @@ using UnityEngine;
 public class PatternElement : MonoBehaviour
 {
     public float WaitTime = 1f;
-    public PatternElement Next = null;
+    public PatternElement Next;
     PatternElement Previous = null; // Parent PatternElement. Can be null. Used when reaching the end of a "line". Set by the father.
+
+    public PatternElement GetPrevious()
+    {
+        return Previous;
+    }
 
     private void Start()
     {
@@ -20,5 +25,30 @@ public class PatternElement : MonoBehaviour
         {
             Next.Previous = this;
         }
+
+        if (Next == null)
+        {
+            Next = this; // By default, the Next element is this element (to allow one-element patterns).
+        }
+    }
+
+    private void Update()
+    {
+        if (Next == null)
+        {
+            Next = this;
+        }
+
+        if (Next != this && Next.Previous != this)
+        {
+            Next.Previous = this;
+        }
+
+        if (Previous != null && Previous.Next != this)
+        {
+            Previous = null;
+        }
+
+
     }
 }

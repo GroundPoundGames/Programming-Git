@@ -32,6 +32,7 @@ public class StateMachineAI : MonoBehaviour
     private void Start()
     {
         // Set the initial State to "Wandering".
+        ChangeState(new MovementPatternState());
     }
 
     // AI Blackboard : link a Unity GameObject to a String entry in a dictionnary

@@ -66,7 +66,8 @@ public class MovementPatternState : AIState
     /// <param name="pattern"></param>
     void SearchClosestPatternElement(MovementPattern pattern)
     {
-        if (pattern.GetPattern().Length == 0)
+        UnityEngine.Debug.Log("Finding closest pattern element from " + pattern.GetPattern().Length + " element.");
+        if (pattern == null || pattern.GetPattern().Length == 0)
         {
             throw new Exception("MovementPattern does not have any Elements !");
         }
@@ -90,16 +91,87 @@ public class MovementPatternState : AIState
         }
     }
 
-    /// <summary>
-    /// Move to the nearest 
-    /// </summary>
+
+    float CurrentWaitTime = 0f; // Starts incrementing from 0 upon reaching the DestElement's position. When over DestElement's WaitTime, a new destination is chosen.
+    // Keeps incrementing as the AI is moving towards its next destination.
+
+    bool BackwardPattern = false; // Move through the pattern backward ? (Child -> Parent instead of Parent -> Child).
+
     public override void Update()
     {
-        
+        if (DestElement != null)
+        {
+            UnityEngine.Debug.DrawLine(GetAI().transform.position, DestElement.transform.position); // Draw a white line from the AI to its current destination point
+        }
+        if (LastElement != null)
+        {
+            UnityEngine.Debug.DrawLine(GetAI().transform.position, LastElement.transform.position, UnityEngine.Color.cyan); // Draw a cyan line from the AI to its last destination point.
+        }
+
+        if (DestElement != null)
+        {
+            float distToDest = (DestElement.transform.position - GetAI().transform.position).sqrMagnitude;
+            if (distToDest > 1f)
+            {
+                // Move to Dest
+                GetAI().MoveTowards(DestElement.transform.position);
+            }
+            else if (CurrentWaitTime > DestElement.WaitTime)
+            {
+                LastElement = DestElement;
+                DestElement = null; // Will trigger FindNextDest() on next update.
+            }
+            else
+            {
+                CurrentWaitTime += UnityEngine.Time.deltaTime;
+            }
+        }
+        else if (LastElement != null)
+        {
+            FindNextDest();
+        }
+
+
     }
 
     public override void OnExit()
     {
         
+    }
+
+    /// <summary>
+    /// Finds the next destination from the current LastElement.
+    /// Resets the CurrentWaitTime.
+    /// </summary>
+    void FindNextDest()
+    {
+        UnityEngine.Debug.Log("Finding next destination...");
+        UnityEngine.Debug.Log("Backward = " + BackwardPattern);
+        if (BackwardPattern)
+        {
+            if (LastElement.GetPrevious() != null)
+            {
+                DestElement = LastElement.GetPrevious();
+            }
+            else
+            {
+                BackwardPattern = false;
+                DestElement = LastElement.Next;
+            }
+        }
+        else
+        {
+            if (LastElement.Next != LastElement)
+            {
+                DestElement = LastElement.Next;
+            }
+            else if (LastElement.GetPrevious() != null)
+            {
+                DestElement = LastElement.GetPrevious();
+                BackwardPattern = true;
+            }
+        }
+
+        CurrentWaitTime = 0.0f;
     }
 }

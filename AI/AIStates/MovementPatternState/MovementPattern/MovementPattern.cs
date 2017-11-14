@@ -9,9 +9,9 @@ using UnityEngine;
 /// </summary>
 public class MovementPattern : MonoBehaviour
 {
-    PatternElement[] Pattern;
+    PatternElement[] Pattern = new PatternElement[0]; // Empty array by default.
 
-    private void Start()
+    private void Awake()
     {
         // At Start, check all children for "PatternElement" components.
         Pattern = gameObject.GetComponentsInChildren<PatternElement>();
@@ -19,6 +19,10 @@ public class MovementPattern : MonoBehaviour
         if (Pattern.Length == 0)
         {
             Debug.LogError("ERROR : No elements in pattern !");
+        }
+        else
+        {
+            Debug.Log("Pattern built ! " + Pattern.Length + " elements.");
         }
     }
 
