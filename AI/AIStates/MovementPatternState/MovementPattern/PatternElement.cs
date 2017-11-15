@@ -48,7 +48,5 @@ public class PatternElement : MonoBehaviour
         {
             Previous = null;
         }
-
-
     }
 }

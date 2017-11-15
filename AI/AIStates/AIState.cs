@@ -26,10 +26,12 @@ public abstract class AIState
         AIWeakRef.Target = ai;
     } // Links a StateMachineAI to this State. Throws an exception if this State is already linked.
 
-    abstract public void OnEntry();
+    abstract public void OnEntry(); // Executed when this state was just entered.
 
-    abstract public void Update();
+    abstract public void Update(); // Executed each frame
 
-    abstract public void OnExit();
+    abstract public void OnExit(); // Executed when the AI changes state.
+
+    abstract public void CheckTransitions(); // Contains all possible transitions to other states.
 
 }

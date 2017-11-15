@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -26,8 +26,12 @@ public class StateMachineAI : MonoBehaviour
     }
     private void Update()
     {
-        CurrentState.Update();
-    } // Updates the current state.
+        if (CurrentState != null)
+        {
+            CurrentState.Update();
+            CurrentState.CheckTransitions(); // TODO : As checking transitions can be CPU intensive, don't do this every frame (every fixed time in seconds or number of frames).
+        }
+    } // Updates the current state and check transitions
 
     private void Start()
     {

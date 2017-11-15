@@ -167,11 +167,23 @@ public class MovementPatternState : AIState
             }
             else if (LastElement.GetPrevious() != null)
             {
-                DestElement = LastElement.GetPrevious();
+                UnityEngine.Debug.Log("Going back !");
                 BackwardPattern = true;
+                FindNextDest();
             }
         }
 
         CurrentWaitTime = 0.0f;
+    }
+
+    public override void CheckTransitions()
+    {
+        // Check if the AI has a "Enemy" gameobject in his blackboard.
+        UnityEngine.GameObject EnemyGO = GetAI().ReadBlackboard("Enemy");
+        if (EnemyGO != null)
+        {
+            // if the Enemy is close by, switch to the combat state.
+            // TODO : combat state
+        }
     }
 }
