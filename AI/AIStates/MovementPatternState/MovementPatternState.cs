@@ -110,20 +110,25 @@ public class MovementPatternState : AIState
 
         if (DestElement != null)
         {
+            BasicMover mover = GetAI().ControlledPawn.GetModule<BasicMover>();
             float distToDest = (DestElement.transform.position - GetAI().transform.position).sqrMagnitude;
-            if (distToDest > 1f)
+            if (mover.Destination != DestElement.transform.position)
             {
-                // Move to Dest
-                GetAI().MoveTowards(DestElement.transform.position);
+                // Set destination to DestElement;
+                UnityEngine.Vector3 dest = DestElement.transform.position;
+                mover.SetDestination(dest.x, dest.y, dest.z);
             }
-            else if (CurrentWaitTime > DestElement.WaitTime)
+            if (mover.ReachedDestination())
             {
-                LastElement = DestElement;
-                DestElement = null; // Will trigger FindNextDest() on next update.
-            }
-            else
-            {
-                CurrentWaitTime += UnityEngine.Time.deltaTime;
+                if (CurrentWaitTime > DestElement.WaitTime)
+                {
+                    LastElement = DestElement;
+                    DestElement = null; // Will trigger FindNextDest() on next update.
+                }
+                else
+                {
+                    CurrentWaitTime += UnityEngine.Time.deltaTime;
+                }
             }
         }
         else if (LastElement != null)
@@ -174,6 +179,11 @@ public class MovementPatternState : AIState
         }
 
         CurrentWaitTime = 0.0f;
+
+        // Set destination
+        BasicMover mover = GetAI().ControlledPawn.GetModule<BasicMover>();
+        UnityEngine.Vector3 dest = DestElement.transform.position;
+        mover.SetDestination(dest.x, dest.y, dest.z);
     }
 
     public override void CheckTransitions()

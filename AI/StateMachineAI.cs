@@ -14,6 +14,9 @@ using System;
 /// </summary>
 public class StateMachineAI : MonoBehaviour
 {
+    // Pawn Management
+    public Pawn ControlledPawn;
+
     // State Management
     AIState CurrentState; // Current state the AI is in.
     public void ChangeState(AIState newState)
@@ -70,35 +73,6 @@ public class StateMachineAI : MonoBehaviour
         else
         {
             return element.GO;
-        }
-    }
-
-    // Pawn actions TODO : Create a "Entity" or "Pawn" class defining the "physical" attributes and capabilities of a character.
-
-    // Attributes :
-
-    float Speed = 2f;
-
-    /// <summary>
-    /// Moves the GameObject towards the dest by a distance of Speed * time.deltaTime. If the point is reached (Speed * 0.1f < dest-transform.position),
-    /// move on the dest point directly.
-    /// Returns weither the destination was reached.
-    /// </summary>
-    /// <param name="dest"> Destination to move towards. </param>
-    public bool MoveTowards(Vector3 dest)
-    {
-        float dist = Speed * Time.deltaTime;
-        float distToDest = (transform.position - dest).sqrMagnitude; // Keep it a square to avoid the costly square root operation.
-        if (dist * dist > distToDest)
-        {
-            // Destination reached ! Move directly onto the dest point.
-            transform.position = dest;
-            return true;
-        }
-        else
-        {
-            transform.Translate((dest - transform.position).normalized * dist);
-            return false;
         }
     }
 }
