@@ -15,7 +15,7 @@ using System;
 public class Pawn : MonoBehaviour {
 
     [Header("Pawn Modules")]
-    public PawnModule[] Modules; // Array of modules. Make sure only one module of a given type
+    public List<PawnModule> Modules; // Array of modules. Make sure only one module of a given type
     // exist within this array !
     /// <summary>
     /// Initialises all modules.
@@ -24,7 +24,7 @@ public class Pawn : MonoBehaviour {
     {
         foreach(PawnModule module in Modules)
         {
-            module.Initialise();
+            module.Initialise(this);
         }
     }
 
@@ -67,7 +67,7 @@ public class Pawn : MonoBehaviour {
     {
         PawnModule mod = null;
         int moduleID = 0;
-        while (mod == null && moduleID < Modules.Length)
+        while (mod == null && moduleID < Modules.Count)
         {
             if (Modules[moduleID] is T)
             {
@@ -96,4 +96,10 @@ public class Pawn : MonoBehaviour {
     {
         UpdateModules(Time.deltaTime);
     }
+
+    private void OnDestroy()
+    {
+        DestroyAllModules();
+    }
+
 }

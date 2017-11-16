@@ -8,17 +8,17 @@ using System.Text;
 /// Each PawnModule can be initialised, updated and destroyed.
 /// </summary>
 [Serializable]
-public class PawnModule
+public abstract class PawnModule : UnityEngine.ScriptableObject
 {
     protected Pawn ModulePawn; // Pawn this module affects.
     bool Destroyed; // Is this Module destroyed ? Used to determine when the Pawn should
     // remove its reference to this module.
-    public virtual void Initialise() { }
-    public virtual void UpdateModule(float deltaTime) { }
+    public abstract void Initialise(Pawn pawn);
+    public abstract void UpdateModule(float deltaTime);
     public void Destroy()
     {
         Destroyed = true;
         OnDestroy();
     }
-    public virtual void OnDestroy() { }
+    public abstract void OnDestroy();
 }

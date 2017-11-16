@@ -112,7 +112,7 @@ public class MovementPatternState : AIState
         {
             BasicMover mover = GetAI().ControlledPawn.GetModule<BasicMover>();
             float distToDest = (DestElement.transform.position - GetAI().transform.position).sqrMagnitude;
-            if (mover.Destination != DestElement.transform.position)
+            if (mover.GetDestination() != DestElement.transform.position)
             {
                 // Set destination to DestElement;
                 UnityEngine.Vector3 dest = DestElement.transform.position;

@@ -10,13 +10,14 @@ using System.Text;
 [Serializable]
 public class BasicMover : PawnModule
 {
-    public float Speed;
-    public UnityEngine.Vector3 Destination;
+    public float Speed = 1f;
+    public string lol;
+    UnityEngine.Vector3 Destination;
     bool DestinationReached = false;
 
-    public override void Initialise()
+    public override void Initialise(Pawn pawn)
     {
-        
+        ModulePawn = pawn;
     }
 
     public override void UpdateModule(float deltaTime)
@@ -39,6 +40,11 @@ public class BasicMover : PawnModule
             Destination = new UnityEngine.Vector3(x, y, z);
             DestinationReached = false;
         }
+    }
+
+    public UnityEngine.Vector3 GetDestination()
+    {
+        return Destination;
     }
 
     void MoveTowardsDestination(float deltaTime)
